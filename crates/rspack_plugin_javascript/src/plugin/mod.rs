@@ -267,6 +267,12 @@ impl JsPlugin {
         "var __webpack_exports__ = {}();",
         RuntimeGlobals::STARTUP
       ));
+
+      // let after_startup_scrip
+      // add after startup
+      startup.push("// after startup".to_string());
+
+      startup.push(" ".to_string());
     }
 
     (header.boxed(), RawSource::from(startup.join("\n")).boxed())

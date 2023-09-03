@@ -215,6 +215,10 @@ bitflags! {
     const NODE_MODULE_DECORATOR = 1 << 47;
 
     const HARMONY_MODULE_DECORATOR = 1 << 48;
+
+    const STARTUP_ONLY_BEFORE = 1 << 49;
+
+    const STARTUP_ONLY_AFTER = 1 << 50;
   }
 }
 
@@ -284,6 +288,8 @@ impl RuntimeGlobals {
       R::CREATE_FAKE_NAMESPACE_OBJECT => "__webpack_require__.t",
       R::HARMONY_MODULE_DECORATOR => "__webpack_require__.hmd",
       R::NODE_MODULE_DECORATOR => "__webpack_require__.nmd",
+      R::STARTUP_ONLY_BEFORE => "__webpack_require__.x (only before)",
+      R::STARTUP_ONLY_AFTER => "__webpack_require__.x (only after)",
       r => panic!(
         "Unexpected flag `{r:?}`. RuntimeGlobals should only be printed for one single flag."
       ),

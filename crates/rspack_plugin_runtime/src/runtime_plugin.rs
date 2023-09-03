@@ -17,7 +17,7 @@ use crate::runtime_module::{
   HarmonyModuleDecoratorRuntimeModule, HasOwnPropertyRuntimeModule,
   LoadChunkWithModuleRuntimeModule, LoadScriptRuntimeModule, MakeNamespaceObjectRuntimeModule,
   NodeModuleDecoratorRuntimeModule, NormalRuntimeModule, OnChunkLoadedRuntimeModule,
-  PublicPathRuntimeModule,
+  PublicPathRuntimeModule, RepackInitRuntimeModule,
 };
 
 #[derive(Debug)]
@@ -77,6 +77,9 @@ impl Plugin for RuntimePlugin {
         .boxed(),
       )
     }
+
+    // REPACK INIT
+    compilation.add_runtime_module(chunk, RepackInitRuntimeModule::new(chunk).boxed());
 
     if compilation.options.output.trusted_types.is_some() {
       if runtime_requirements.contains(RuntimeGlobals::LOAD_SCRIPT) {
@@ -181,10 +184,9 @@ impl Plugin for RuntimePlugin {
           )
           .boxed(),
         ),
-        RuntimeGlobals::LOAD_SCRIPT => compilation.add_runtime_module(
-          chunk,
-          LoadScriptRuntimeModule::new(compilation.options.output.trusted_types.is_some()).boxed(),
-        ),
+        RuntimeGlobals::LOAD_SCRIPT => {
+          compilation.add_runtime_module(chunk, LoadScriptRuntimeModule::new(chunk).boxed())
+        }
         RuntimeGlobals::HAS_OWN_PROPERTY => {
           compilation.add_runtime_module(chunk, HasOwnPropertyRuntimeModule::default().boxed())
         }
